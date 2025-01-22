@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+message StudentDetails {
+    string student_id = 1;
+    string student_name = 2;
+    bool onboard = 3;
+    
+    message BehaviorComment {
+      google.protobuf.Timestamp date = 1;
+      string comment = 2;
+      uint32 pages_completed = 3;
+    }
+    
+    repeated BehaviorComment behavior_comments = 4;
+    
+    message Lesson {
+      string name = 1;
+      bool completed = 2;
+    }
+    
+    uint32 total_plan_length = 5;
+    repeated Lesson updated_lessons = 6;
+}

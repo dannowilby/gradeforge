@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, send_file
 from markupsafe import escape
 
+from .proto import student_details_pb2 as StudentDetails
+
 # start another process p2 here to handle report card creation
 app = Flask(__name__)
 
