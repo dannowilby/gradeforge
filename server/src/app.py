@@ -8,6 +8,11 @@ app = Flask(__name__)
 def index():
     return send_file("pages/index.html")
 
+@app.get("/about")
+def about():
+    return send_file("pages/about.html")
+
+
 @app.get("/view/<student_id>")
 def view_reports(student_id=None):
     return f"<p>Not implemented yet: {escape(student_id)}.</p>"
