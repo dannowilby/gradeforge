@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.get("/")
 def index():
-    return send_file("index.html")
+    return send_file("pages/index.html")
 
 @app.get("/view/<student_id>")
 def view_reports(student_id=None):
