@@ -1,18 +1,25 @@
+import os
+
 from flask import Flask, request, jsonify, send_file
 from markupsafe import escape
 import google
+from sqlalchemy import create_engine, text
 
+from .database import Database
 from .proto.student_details_pb2 import StudentDetails
 
 
 def app(generator, queue):
     app = Flask(__name__)
 
+    database = Database()
+
     # register routes
     app.get("/")(index)
     app.get("/about")(about)
     app.get("/view/<student_id>")(view_reports)
     app.post("/generate")(lambda: generate(queue))
+    app.get("/print")(print_db(database))
     
     # Daemon generator process debug endpoints
     # app.get("/process/poke_with_stick")(poke_with_stick(generator))
@@ -53,6 +60,12 @@ def generate(queue):
 
     return f"Creating report card for {student_details.student_name}! Please check back later for results.\n", 200
 
+
+def print_db(database):
+    def t():
+        students = database.get_students()
+        return str(students), 200
+    return t
 
 def poke_with_stick(generator):
     def c():

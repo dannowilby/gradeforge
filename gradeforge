@@ -1,7 +1,9 @@
 #!/bin/bash
 
 run() {
+    cp .env build/.env # copy over the environment variables
     echo "Starting services with Docker Compose..."
+    docker-compose -f "$1" build
     docker-compose -f "$1" up
 }
 
@@ -26,10 +28,10 @@ EOF
 )
 
 case ${1,,} in
-    "help" | "")
-        echo "$welcome" ;;
     "ollama")
         echo "Selected generation model: Ollama (local)" && run "build/compose-ollama.yaml" ;;
     "claude")
         echo "Selected generation model: Claude (api)" && run "build/compose-claude.yaml" ;;
+    *)
+        echo "$welcome" ;;
 esac
