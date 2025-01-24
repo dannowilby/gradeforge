@@ -1,64 +1,35 @@
 #!/bin/bash
 
-# Essentially, this script builds a temp docker compose file based on the options passed in
-# by the user, and runs it, starting the GradeForge service
-
-compose_file=$(mktemp) # a temp file for the docker-compose.yaml
-exec 3>"$compose_file" # make it easy to write to
-trap "rm -f $compose_file && exec 3>&-" EXIT # remove and get rid of fd
-
-compose_template=$(cat <<-END
-    This is line one.
-    This is line two.
-    This is line three.
-END
-)
-
-ollama_extension=$(cat <<-END
-    This is line one.
-    This is line two.
-    This is line three.
-END
-)
-
-claude_extension=$(cat <<-END
-    This is line one.
-    This is line two.
-    This is line three.
-END
-)
-
 run() {
-    echo "$compose_template" >&3 # put the base template in the temp file
-    echo "$1" >&3 # put the generation service in the file
     echo "Starting services with Docker Compose..."
-    # docker-compose -f "$compose_template" down
+    docker-compose -f "$1" up
 }
 
-run_welcome() {
-    echo "GradeForge is a tool to automatically generate student report cards using large"
-    echo "language models."
-    echo ""
-    echo "To run this service, make sure the following are true:"
-    echo "1. Docker compose is installed"
-    echo "  - installation instructions: https://docs.docker.com/compose/install/."
-    echo ""
-    echo "2. The correct environment variables are set"
-    echo "  - Depending on the generative model you decide to use, set the appropriate" 
-    echo "    credentials in the .env file in this folder."
-    echo ""
-    echo "Now you can run the service using the following command:"
-    echo "./gradeforge [ollama|claude]"
-    echo ""
-    echo "Have fun! Report any issues here:"
-    echo "https://github.com/dannowilby/gradeforge/issues"
-}
+welcome=$(cat <<-EOF
+GradeForge is a tool to automatically generate student report cards using large
+language models.
+
+To run this service, make sure the following are true:
+1. Docker compose is installed
+  - installation instructions: https://docs.docker.com/compose/install/.
+
+2. The correct environment variables are set
+  - depending on the generative model you decide to use, set the appropriate
+    credentials in the .env file in this folder.
+
+Now you can run the service using the following command:
+./gradeforge [ollama|claude]
+
+Have fun! Report any issues here:
+https://github.com/dannowilby/gradeforge/issues
+EOF
+)
 
 case ${1,,} in
     "help" | "")
-        run_welcome ;;
+        echo "$welcome" ;;
     "ollama")
-        echo "Selected generation model: Ollama (local)" && run "$ollama_extension" ;;
+        echo "Selected generation model: Ollama (local)" && run "build/compose-ollama.yaml" ;;
     "claude")
-        echo "Selected generation model: Claude (api)" && run "$claude_extension" ;;
+        echo "Selected generation model: Claude (api)" && run "build/compose-claude.yaml" ;;
 esac
