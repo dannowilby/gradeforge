@@ -17,4 +17,4 @@ if __name__ == '__main__':
     generator.start()
 
     atexit.register(lambda: queue.put(None)) # send kill signal
-    serve(app(generator, queue), host='0.0.0.0', port=port)
+    serve(app(queue), host='0.0.0.0', port=port)
