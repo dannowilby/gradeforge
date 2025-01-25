@@ -1,9 +1,8 @@
 import os
 
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, send_file
 from markupsafe import escape
-import google
-from sqlalchemy import create_engine, text
+from google.protobuf.message import DecodeError
 
 from .database import Database
 from .proto.student_details_pb2 import StudentDetails
@@ -93,7 +92,7 @@ def generate(queue):
     try:
         data = request.get_data()
         student_details.ParseFromString(data)
-    except google.protobuf.message.DecodeError:
+    except DecodeError:
         return "Error parsing student details.\n", 400
     
     # need to check if queue can accept, in its current state it will block 

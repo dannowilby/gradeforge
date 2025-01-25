@@ -1,8 +1,7 @@
 import sys
 import os
 
-import google
-from sqlalchemy import create_engine, text
+from google.protobuf.message import DecodeError
 
 from .llm import Claude, Ollama
 from .database import Database
@@ -32,7 +31,7 @@ def run(queue):
         details = StudentDetails()
         try:
             details.ParseFromString(msg)        
-        except google.protobuf.message.DecodeError:
+        except DecodeError:
             continue
 
         # generate the report card
