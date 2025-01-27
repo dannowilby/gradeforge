@@ -7,7 +7,7 @@ import requests
 
 from .proto.student_details_pb2 import StudentDetails
 
-class LLM(ABC):
+class TextGen(ABC):
 
     @abstractmethod
     def get_formatted_prompt(self, details: StudentDetails) -> str:
@@ -18,7 +18,7 @@ class LLM(ABC):
         return "Base implementation."
 
 
-class Claude(LLM):
+class Claude(TextGen):
     def __init__(self):
         self.name = "claude"
         self.client = Anthropic()
@@ -51,7 +51,7 @@ class Claude(LLM):
         ).content[0].text
 
 
-class Ollama(LLM):
+class Ollama(TextGen):
     def __init__(self):
         self.name = "ollama"
         self.port = os.environ["OLLAMA_PORT"]
@@ -82,6 +82,16 @@ class Ollama(LLM):
         )
 
     def generate_report(self, details):
-        resp = requests.post(f"http://ollama:{self.port}/api/generate", json={ "model": "llama3.2", "prompt": self.get_formatted_prompt(details), "stream": False }, timeout=(10, 300))
+
+        resp = requests.post(
+            f"http://ollama:{self.port}/api/generate", 
+            json={ 
+                "model": "llama3.2", 
+                "prompt": self.get_formatted_prompt(details), 
+                "stream": False 
+            }, 
+            timeout=(10, 300)
+        )
+        
         return resp.json()['response']
     

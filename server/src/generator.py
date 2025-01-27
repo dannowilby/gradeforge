@@ -5,8 +5,9 @@ from google.protobuf.message import DecodeError
 from google.protobuf.json_format import MessageToJson
 
 
-from .llm import Claude, Ollama
+from .text_gen import Claude, Ollama
 from .database import Database
+from .notify import Notify
 from .proto.student_details_pb2 import StudentDetails
 
 def run(queue):
@@ -17,14 +18,18 @@ def run(queue):
     procedure has completed.
     """
 
-    gen_service = {
-        'claude': Claude(),
-        'ollama': Ollama()
-    }[os.environ["MODEL"]] # Do better
+    text_gen = None
+    match os.environ["MODEL"]:
+        case "claude":
+            text_gen = Claude()
+        case "ollama":
+            text_gen = Ollama()
 
     # now that we are on a separate process, create its own db connection
     database = Database()
 
+    notify_enabled = "NOTIFICATIONS_ENABLED" in os.environ
+    notifier = notify_enabled and Notify()
 
     while msg := queue.get():
         if msg is None:
@@ -37,9 +42,11 @@ def run(queue):
             continue
 
         # generate the report card
-        report =  gen_service.generate_report(details)
+        report = text_gen.generate_report(details)
         
         # store the report in the db
         database.store_report(details, report)
 
         # send a text message that jobs done
+        if notify_enabled:
+            notifier.send_message(details)
