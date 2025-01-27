@@ -49,7 +49,7 @@ def reports_overview_wrapper(database):
         output = "<h2>Student Reports</h2>"
         students = database.get_students()
         for student in students:
-            output += f"<p><a href='/view/{student.student_id}'>{student.student_name}</a></p>"
+            output += f"<p><a href='/view/{student[0]}'>{student[1]}</a></p>"
         return output, 200
     
     return reports_overview
@@ -70,11 +70,11 @@ def view_report_wrapper(database):
         
         # manually building out the interface like this is not the greatest 
         # solution ever however it works, and is relatively easy to maintain
-        output = f"<h2>{results[0].student_name}</h2><h3>{student_id}</h3>"
+        output = f"<h2>{results[0][0]}</h2><h3>{student_id}</h3>"
         for row in results:
             output += "<div style='margin: 1rem;border-top: solid;'>"
-            output +=   f"<p>{row.created_at}</p>"
-            output +=   f"<p style='margin-left: 2rem;'>{row.report}</p>"
+            output +=   f"<p>{row[2]}</p>"
+            output +=   f"<p style='margin-left: 2rem;'>{row[1]}</p>"
             output += "</div>"
         return output, 200
     
