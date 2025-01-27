@@ -1,0 +1,28 @@
+services:
+  backend:
+    depends_on:
+      - db
+      - ollama
+    build: ../server/
+    ports: 
+      - ${PORT}:${PORT}
+    env_file: ".env"
+    environment:
+      MODEL: "ollama"
+  db:
+    image: postgres
+    ports:
+      - ${PG_PORT}:${PG_PORT}
+    expose:
+      - ${PG_PORT}
+    environment:
+      POSTGRES_DB: ${PG_DB}
+      PGPORT: ${PG_PORT}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASS}
+  ollama:
+    build: ./ollama/
+    ports:
+      - ${OLLAMA_PORT}:11434
+    expose:
+      - ${OLLAMA_PORT}
