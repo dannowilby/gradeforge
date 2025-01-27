@@ -12,7 +12,9 @@ class Database:
         db_pass = os.environ["PG_PASS"]
         db_port = os.environ["PG_PORT"]
         db_name = os.environ["PG_DB"]
-        self.engine = create_engine(f"postgresql+psycopg://{db_user}:{db_pass}@db:{db_port}/{db_name}")
+        self.engine = create_engine(
+            f"postgresql+psycopg://{db_user}:{db_pass}@db:{db_port}/{db_name}"
+        )
 
         with self.engine.connect() as conn:
             conn.execute(text("DROP TABLE report_cards"))

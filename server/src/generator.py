@@ -2,6 +2,8 @@ import sys
 import os
 
 from google.protobuf.message import DecodeError
+from google.protobuf.json_format import MessageToJson
+
 
 from .llm import Claude, Ollama
 from .database import Database
@@ -35,13 +37,9 @@ def run(queue):
             continue
 
         # generate the report card
-        report = gen_service.generate_report(details)
+        report =  gen_service.generate_report(details)
         
         # store the report in the db
         database.store_report(details, report)
 
         # send a text message that jobs done
-
-
-def generate_report_card(details):
-    pass
