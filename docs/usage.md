@@ -1,10 +1,3 @@
-
-# GradeForge
-
-This is a reimplementation of the first report card generator I made in late 2023. The extension contains code used to scrape the company's admin pages, and I have made that code private due to the potential risk of exposing sensitive details inadvertently.
-
-As an internal tool the interface is not flashy, just doing what it needs to.
-
 The following shows example data and the generated response from Claude for a non-existent student:
 ```
 student_id: "103448"
