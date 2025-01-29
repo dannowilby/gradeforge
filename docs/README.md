@@ -17,7 +17,7 @@ GradeForge coordinates a few different services to handle
 ## Setup
 The setup guide is [here](setup.md).
 
-## Usage
+## Usage + Example
 The usage guide is [here](usage.md), and provides an example input and output for the application.
 
 ## Limitations
