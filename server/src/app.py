@@ -1,6 +1,7 @@
 import os
 
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, jsonify
+from flask_cors import CORS
 from markupsafe import escape
 from google.protobuf.message import DecodeError
 
@@ -17,26 +18,18 @@ def app(queue):
     """
 
     app = Flask(__name__)
+    CORS(app, resources={r"/*": {"origins": "*"}})
 
     database = Database()
 
     # Register routes without decorator so that we can pass more context
     # Flask specifically has a context data structure for this purpose, but
-    # this method for now. 
-    app.get("/")(index)
-    app.get("/about")(about)
+    # this method for now.
     app.get("/view")(reports_overview_wrapper(database))
     app.get("/view/<student_id>")(view_report_wrapper(database))
     app.post("/generate")(lambda: generate(queue))
 
     return app
-
-
-def index():
-    return send_file("pages/index.html")
-
-def about():
-    return send_file("pages/about.html")
 
 def reports_overview_wrapper(database):
     """
@@ -46,11 +39,8 @@ def reports_overview_wrapper(database):
     for them in the database.
     """
     def reports_overview():
-        output = "<h2>Student Reports</h2>"
         students = database.get_students()
-        for student in students:
-            output += f"<p><a href='/view/{student[0]}'>{student[1]}</a></p>"
-        return output, 200
+        return jsonify(students)
     
     return reports_overview
 
@@ -64,19 +54,7 @@ def view_report_wrapper(database):
     
     def view_report(student_id=None):
         results = database.get_reports_for_student(student_id)
-        
-        if len(results) < 1:
-            return "<p>No results.</p>", 200
-        
-        # manually building out the interface like this is not the greatest 
-        # solution ever however it works, and is relatively easy to maintain
-        output = f"<h2>{results[0][0]}</h2><h3>{student_id}</h3>"
-        for row in results:
-            output += "<div style='margin: 1rem;border-top: solid;'>"
-            output +=   f"<p>{row[2]}</p>"
-            output +=   f"<p style='margin-left: 2rem;'>{row[1]}</p>"
-            output += "</div>"
-        return output, 200
+        return jsonify(results)
     
     return view_report
 
