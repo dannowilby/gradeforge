@@ -73,8 +73,11 @@ def generate(queue):
     except DecodeError:
         return "Error parsing student details.\n", 400
     
-    # need to check if queue can accept, in its current state it will block 
-    # until it can place the value
-    queue.put(data)
+    # If the queue is full, don't accept it and tell the extension instead
+    try:
+        queue.put(data, False)
+    except queue.Full:
+        return f"Queue is full, try again later", 200
+
 
     return f"Creating report card for {student_details.student_name}! Please check back later for results.\n", 200
