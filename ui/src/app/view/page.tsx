@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function View() {
 
-    const [data, setData] = useState<string[] | null>(null);
+    const [data, setData] = useState<string[][] | null>(null);
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function View() {
     return (
       <div className="w-1/3 mx-auto my-12">
         <h1 className="text-xl font-bold">Students</h1>
-        {data != null && data.map(([student_id, student_name]: string[2], i: number) => (
+        {data != null && data.map(([student_id, student_name], i) => (
           <Link className="link block my-2" key={i} href={`/view/${student_id}`}>{student_name}</Link>
         ))}
       </div>
