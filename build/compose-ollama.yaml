@@ -26,3 +26,9 @@ services:
       - ${OLLAMA_PORT}:11434
     expose:
       - ${OLLAMA_PORT}
+  frontend:
+    build: ../ui/
+    ports:
+      - ${UI_PORT}:4000
+    environment:
+      BACKEND_PORT: ${PORT}

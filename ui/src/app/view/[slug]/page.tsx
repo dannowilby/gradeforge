@@ -16,20 +16,24 @@ export default function Report() {
           setData(data)
           setLoading(false)
         })
-    }, [])
+    }, [student_id])
 
-    if (isLoading || data == null || data.length < 1)
-        return (<div className="w-1/3 mx-auto my-12"><h1>loading...</h1></div>);
+    if (isLoading || data == null)
+      return (
+        <div className="w-1/3 mx-auto my-12 skeleton h-[25vh]" />
+      )
 
     return (
       <div className="w-1/3 mx-auto my-12">
-        <h1 className="font-bold">{data[0][0]}</h1>
+        <h1 className="font-bold">{data.length > 0 && data[0][0]}</h1>
         <h2>{student_id}</h2>
 
         <table className="table my-8">
           <thead>
-            <th>Date</th>
-            <th>Response</th>
+            <tr>
+              <th>Date</th>
+              <th>Response</th>
+            </tr>
           </thead>
           <tbody>
             {data.map(([, report, date], index) => (

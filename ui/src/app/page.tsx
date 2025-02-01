@@ -1,3 +1,4 @@
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
 
       <p className="mb-3">Usage documentation can be found at this <a className="link" href="https://github.com/dannowilby/gradeforge">link</a>. Report any issues <a className="link" href="https://github.com/dannowilby/gradeforge/issues">here</a>.</p>
 
-      <a className="link block" href="/view">View reports</a>
+      <Link className="link block" href="/view">View reports</Link>
     </div>
   );
 }

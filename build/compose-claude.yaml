@@ -19,9 +19,9 @@ services:
       PGPORT: ${PG_PORT}
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASS}
-  # frontend:
-  #   build: ../ui/
-  #   ports:
-  #     - ${UI_PORT}:4000
-  #   environment:
-  #     BACKEND_PORT: ${PORT}
+  frontend:
+    build: ../ui/
+    ports:
+      - ${UI_PORT}:4000
+    environment:
+      BACKEND_PORT: ${PORT}
