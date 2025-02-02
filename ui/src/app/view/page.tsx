@@ -9,7 +9,7 @@ export default function View() {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-      fetch("http://localhost:3000/view").then(res => res.json())
+      fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/view`).then(res => res.json())
         .then(data => {
           setData(data)
           setLoading(false)

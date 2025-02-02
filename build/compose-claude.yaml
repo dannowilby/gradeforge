@@ -24,4 +24,4 @@ services:
     ports:
       - ${UI_PORT}:4000
     environment:
-      BACKEND_PORT: ${PORT}
+      NEXT_PUBLIC_PORT: ${PORT}

@@ -1,9 +1,28 @@
 #!/bin/bash
 
+env_changed() {
+    if [ ! -f env.cksum ]; then
+        make_env_checksum
+        echo "--no-cache"
+    elif [[ "$(< env.cksum)" != "$(md5sum .env)" ]]; then
+        make_env_checksum
+        echo "--no-cache"
+    else 
+        echo ""
+    fi
+}
+
+make_env_checksum() {
+    echo "$(md5sum .env)" > env.cksum
+}
+
 run() {
+    echo "Copying build files..."
     cp .env build/.env # copy over the environment variables
+    cp .env ui/.env
+    echo "Building containers..."
+    docker-compose -f "$1" build $(env_changed)
     echo "Starting services with Docker Compose..."
-    docker-compose -f "$1" build
     docker-compose -f "$1" up
 }
 

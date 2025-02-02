@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation"
 
+
 export default function Report() {
     const pathname = usePathname()
     const student_id = pathname.split("/").at(-1);
@@ -11,7 +12,7 @@ export default function Report() {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-      fetch(`http://localhost:3000/view/${student_id}`).then(res => res.json())
+      fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/view/${student_id}`).then(res => res.json())
         .then(data => {
           setData(data)
           setLoading(false)
