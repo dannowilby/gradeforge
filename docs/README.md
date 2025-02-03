@@ -6,11 +6,13 @@ GradeForge converts student data into personalized report cards automatically.
 - Generates report cards with your choice of LLM<sup>1</sup>
 - Provides a dashboard of previously made reports
 - Updates you through text when generation has completed
-- Can be managed with a single command
+- Can be managed with a single command<sup>2</sup>
 
 This is a reimplementation of the first report card generator I made in late 2023 for my work at the time. The extension contains code used to scrape the company's admin pages, and I have made that code private due to the potential risk of exposing sensitive details inadvertently.
 
 <sup>1 - It comes packaged with the choice of Anthropic Claude's API or an Ollama model, but the [`TextGen`](../server/src/text_gen.py) interface can easily be extended to add more.</sup>
+
+<sup>2 - Other features and options can be configured directly with its [environment variables](environment.md).</sup>
 
 ## Usage
 After completing [setup](#setup), the service's main generation endpoint `/generate` will be ready to accept data. The data is expected to be a binary string encoded by its [protocal buffer object](../proto/student_details.proto).
