@@ -17,7 +17,7 @@ After completing [setup](setup.md) and starting the application by running `./gr
 
 This will kick off the generation, store it in the database, and finally send you a text confirming it has completed. You can then use the dashboard to see all the reports you've generated.
 
-(screenshot of generated report cards)
+![screenshot of an example student's report cards](ui-screenshot.png)
 
 ## How it works
 GradeForge coordinates a number of different services to achieve its goal.
