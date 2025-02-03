@@ -13,34 +13,32 @@ This is a reimplementation of the first report card generator I made in late 202
 <sup>1 - It comes packaged with the choice of Anthropic Claude's API or an Ollama model, but the [`TextGen`](../server/src/text_gen.py) interface can easily be extended to add more.</sup>
 
 ## Usage
-After starting the application by running `./gradeforge [ollama|claude]`, send a post request to `/generate` with the student's data (as a binary string encoded using the protobuf schema). Typically, you would use the extension to automatically scrape the details and form the body for the endpoint, but this can also be emulated using cURL.
+After completing [setup](setup.md) and starting the application by running `./gradeforge [ollama|claude]`, send a post request to the backend's `/generate` endpoint with the student's data (as a binary string encoded using the protobuf schema). Typically, you would use the extension to automatically scrape the details and form the body for the endpoint, but this can also be emulated using cURL.
 
-This will kick off the generation, then store it in the database, and finally send you a text confirming it has completed.
+This will kick off the generation, store it in the database, and finally send you a text confirming it has completed. You can then use the dashboard to see all the reports you've generated.
 
 (screenshot of generated report cards)
 
 ## How it works
 GradeForge coordinates a number of different services to achieve its goal.
 
-### The backend
-As the report generation process itself can take a fair amount of time (especially if using Ollama), this is offloaded to a separate process than the server. This allows the blocking generation process to not hold up the actual server. The server sends 
+### Architecture
 
-Communication between the two occurs through a PostgreSQL instance and ensures that users won't have to wait for individual report cards to finish processing before requesting another one.
+The backend is a pair of Python processes and a PostgreSQL instance. The processes are split so that one process can handle incoming generation and data requests, and then pass them off to the second to actually carry out the generation itself. The result is stored in the database, which can be written to and read from on both processes.
 
-### The extension
+Report card generation can take an indeterminate amount of time, so handling requests this way allows proper utilization of resources.
 
-### The ui
+### Generation request processing
 
-### Coordinating the services
-uses Docker Compose to manage the different services needed to generate and serve the report cards. The bash script provided will switch between the different Docker Compose build files.
+The generation process starts by using an LLM to generate the text content of the report card. Depending on the options that the application was run with, the process will either query an Ollama model or Anthropic's Claude, storing it in the database after completion. The process then uses Boto3 to send an SMS to notify of the completed generation.
 
+### Orchastrating
+
+The bash script is included to allow an easy way for less technical users to navigate its options. The script also manages a checksum of your environment variables to verify if the containers should be built again, as Docker Compose won't rebuild containers if build-time environment variables change.
 
 
 (Add miro architecure diagram here)
 
-### Putting it all together
-
-The bash script allows less technical users easily restart the application in case of errors or malfunction.
 
 ## Setup
 Setup typically only requires making sure you have Docker Compose installed and that the appropriate environment variables are set. For a detailed explanation of these steps, check out [this guide](setup.md).
@@ -52,4 +50,4 @@ After setting up the project, running the `gradeforge` bash script is all you ne
 
 As previously mentioned, the extension code has not been included as it contains specific, closed source implementation details for the propriatery software used at my previous work.
 
-The setup has been purposefully made to be as easy as possible. That said, there is no automatic provision of AWS SNS as the initial creation of the service requires your organization to be authorized (at least according to US regulations).
+The setup has been purposefully made to be as easy as possible. That said, there is no automatic provision of AWS SNS as the initial creation of the service requires your organization to be authorized (depending on your local regulations).
