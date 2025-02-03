@@ -24,7 +24,7 @@ GradeForge coordinates a number of different services to achieve its goal.
 
 ### Architecture
 
-The backend is a pair of Python processes and a PostgreSQL instance. The processes are split so that one process can handle incoming generation and data requests, and then pass them off to the second to actually carry out the generation itself. The result is stored in the database, which can be written to and read from on both processes.
+The backend is a pair of Python processes and a PostgreSQL instance. The processes are split so that one process can handle incoming generation and data requests, and then pass the generation requests off to the second to actually carry out the generation itself. The result is stored in the database, which can be written to and read from on both processes.
 
 Report card generation can take an indeterminate amount of time, so handling requests this way allows proper utilization of resources.
 
@@ -37,7 +37,7 @@ The generation process starts by using an LLM to generate the text content of th
 The bash script is included to allow an easy way for less technical users to navigate its options. The script also manages a checksum of your environment variables to verify if the containers should be built again, as Docker Compose won't rebuild containers if build-time environment variables change.
 
 
-(Add miro architecure diagram here)
+![architecture diagram](architecture-diagram.png)
 
 
 ## Setup
