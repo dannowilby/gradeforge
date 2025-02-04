@@ -6,7 +6,7 @@ A student's report card needs to answer a few different questions,
 * Is there anything they've been struggling on or excelling at?
 * What are the current topics they're working on?
 
-When using the [extension](../extension/README.md), this data is all automatically gathered and sent to the generation service. If you are a third-party or are just testing the tool, then you will either have to create a mechanism to gather and send the data or follow the process below.
+When using the [extension](https://github.com/dannowilby/gradeforge-extension/), this data is all automatically gathered and sent to the generation service. If you are a third-party or are just testing the tool, then you will either have to create a mechanism to gather and send the data or follow the process below.
 
 ## Creating the data
 
