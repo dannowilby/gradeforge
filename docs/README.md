@@ -12,7 +12,7 @@ This is a reimplementation of the first report card generator I made in late 202
 
 <sup>1 - It comes packaged with the choice of Anthropic Claude's API or an Ollama model, but the [`TextGen`](../server/src/text_gen.py) interface can easily be extended to add more.</sup>
 
-<sup>2 - Other features and options can be configured directly with its [environment variables](environment.md).</sup>
+<sup>2 - Other features and options can be configured directly with its [environment variables](../example.env).</sup>
 
 ## Usage
 After completing [setup](#setup), the service's main generation endpoint `/generate` will be ready to accept data. The data is expected to be a binary string encoded by its [protocal buffer object](../proto/student_details.proto).
@@ -55,8 +55,9 @@ The bash script is included to allow an easy way for less technical users to nav
 The serivce uses [protocal buffers](https://protobuf.dev/) to pass around the student details. This allows the objects to be fairly compressed with relatively fast decompression, be strongly-typed, and be easily maintainable.
 
 ## Setup
-Setup typically only requires making sure you have [Docker Compose](https://docs.docker.com/compose/install/) installed and that the appropriate environment variables are set. For a detailed explanation of the different environment variables that need to be set, look [here](environment.md).
+Setup typically only requires making sure you have [Docker Compose](https://docs.docker.com/compose/install/) installed and that the appropriate environment variables are set. For a detailed explanation of the different environment variables that need to be set, look [here](../example.env).
 
+Optionally, if you want to use SMS notifications, [configure an AWS SNS instance](https://docs.aws.amazon.com/sns/latest/dg/sns-mobile-phone-number-as-subscriber.html) with a topic named `gradeforge-updates`. Attached to this topic should be all the phone numbers you want to be notified when a generation request has completed.
 
 ## Limitations
 
